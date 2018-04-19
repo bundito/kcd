@@ -20,13 +20,19 @@ public:
 
     ParseKdesrc pk;
     metadata md;
+
     KConfig cfg;
     KConfigGroup generalGroup;
-    KSharedConfigPtr cfgPtr;
+
+    KSharedConfigPtr m_config;
 
     void updateCfg();
 
+    void setup();
+
     void storeXMLFile(QString file);
+
+    void storeData(QString key, QVariant value);
 
     QString getMetaData();
     void setConfigFile(QString file);

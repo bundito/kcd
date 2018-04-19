@@ -1,5 +1,7 @@
 #include "parsekdesrc.h"
 
+#include "kcdconfig.h"
+
 #include <QFile>
 #include <QString>
 #include <QUrl>
@@ -64,7 +66,7 @@ QString ParseKdesrc::parseFile() {
         QRegularExpressionMatch installMatch = installDir.match(line);
         if (installMatch.hasMatch()) {
             // qDebug() << "install: " << installMatch.captured(1);
-            m_installDir = sourceMatch.captured(1);
+            m_installDir = installMatch.captured(1);
         }
     }
 
@@ -72,6 +74,8 @@ QString ParseKdesrc::parseFile() {
     QRegularExpression tilde(QStringLiteral("~"));
     m_sourceDir.replace(tilde, m_homedir);
     m_installDir.replace(tilde, m_homedir);
+
+
 
     return i18n("Parsing successful.");
 }

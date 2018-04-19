@@ -20,6 +20,9 @@ kcdXML::kcdXML()
     KSharedConfigPtr m_config = KSharedConfig::openConfig(QStringLiteral("kcdrc"));
     kcdConfig cfg;
 
+    m_total = 0;
+    m_installed = 0;
+
 }
 
 bool kcdXML::findXML(QString fname) {
@@ -39,7 +42,6 @@ bool kcdXML::findXML(QString fname) {
         QXmlStreamWriter stream(&file);
         stream.writeStartDocument();
         stream.setAutoFormatting(true);
-        file.close();
         bool ok = stream.hasError();
         if (!ok) {
             // qDebug() << i18n("Streamwriter has error");
@@ -57,6 +59,9 @@ bool kcdXML::findXML(QString fname) {
 }
 
 void kcdXML::addEntry(QString data) {
+
+    m_total++;
+
     QUrl url = QUrl::fromLocalFile(data);
     QString dirName = url.fileName();
 
@@ -65,8 +70,13 @@ void kcdXML::addEntry(QString data) {
     mfLoc.append(data);
     QDir dir(mfLoc);
     bool exists = dir.exists();
+    if (exists) {
+        m_installed++;
+    }
     qDebug() << mfLoc;
     QString inst = QString::number(exists);
+
+
 
     QXmlStreamAttribute installed(QStringLiteral("installed"), QStringLiteral("true"));
 

@@ -100,7 +100,7 @@ int main(int argc, char **argv)
         exit(0);
     }
 
-/**
+
     if (pkgWanted != QStringLiteral("")) {
         qDebug() << pkgWanted;
         QString xmlFile = xml.getXMLfile();
@@ -114,5 +114,5 @@ int main(int argc, char **argv)
     }
 
     return 0;
-*/
+
 }

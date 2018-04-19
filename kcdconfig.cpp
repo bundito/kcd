@@ -8,25 +8,49 @@
 
 #include "kcdconfig.h"
 #include "parsekdesrc.h"
+#include "metadata.h"
+
+
 
 kcdConfig::kcdConfig()
 {
-   KConfig config(QStringLiteral("kcdrc"));
-   KSharedConfigPtr cfgPtr = KSharedConfig::openConfig(QStringLiteral("kcdrc"));
-   KConfigGroup generalGroup( &config, QStringLiteral("General") );
 
-   updateCfg();
+   ParseKdesrc pk;
+   metadata md;
+
+   KSharedConfigPtr m_config = KSharedConfig::openConfig(QStringLiteral("kcdrc"));
+   generalGroup = KConfigGroup(m_config, QStringLiteral("General"));
+   generalGroup.writeEntry(QStringLiteral("lastRefreshed"), QDateTime::currentDateTime());
+
+   //updateCfg();
+}
+void kcdConfig::setup() {
+
+    QString source = pk.getSourceDir();
+    storeData(QStringLiteral("sourceDir"), source);
+
+    QString install = pk.getInstallDir();
+    storeData(QStringLiteral("installDir"), install);
+
+    QString xmlFile = md.getMetaData(source);
+    storeData(QStringLiteral("xmlFile"), xmlFile);
+
+}
+
+void kcdConfig::storeData(QString key, QVariant value) {
+
+    generalGroup.writeEntry(key, value);
+    generalGroup.sync();
 }
 
 void kcdConfig::updateCfg() {
-    ParseKdesrc pk;
-    metadata md;
+
     qDebug() << i18n("getting metadata");
     getSourceDir();
     getMetaData();
 
     //KConfig config(QStringLiteral("kcdrc"));
-    KConfigGroup generalGroup( cfgPtr, QStringLiteral("General") );
+
 
     generalGroup.writeEntry("SourceDir", pk.getSourceDir());
     generalGroup.writeEntry("rcFile", pk.findRcFile());;
@@ -47,7 +71,7 @@ QString kcdConfig::getRcFile() {
 }
 
 QString kcdConfig::getSourceDir() {
-    KConfigGroup generalGroup( cfgPtr, QStringLiteral("General") );
+
     return generalGroup.readEntry("SourceDir");
 }
 
