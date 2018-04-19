@@ -5,7 +5,7 @@
 
 #include <QString>
 #include <QFile>
-#include <QRegularExpression>>
+#include <QRegularExpression>
 
 
 class metadata
@@ -19,7 +19,7 @@ public:
     QString m_metafile;
 
     // get metadata file
-    QString findMetaFile();
+    QString getMetaData(QString sourceDir);
 
     // scan metadatafile
     QString scanMetaFile();

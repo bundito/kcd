@@ -16,19 +16,20 @@
 
 #include <KLocalizedString>
 
+#include "kcdxml.h"
+
 metadata::metadata()
 {
-    m_metafile = findMetaFile();
+    //m_metafile = getMetaData();
 }
 
-QString metadata::findMetaFile() {
+QString metadata::getMetaData(QString sourceDir) {
 
     // The metadata file should be in ..src/kde-build-metadata
 
-    ParseKdesrc pk;
-    QString pk1 = pk.findRcFile();
-    QString pk2 = pk.parseFile();
-    QString mfLoc = pk.getSourceDir();
+    qDebug() << i18n("Hello from metadata");
+
+    QString mfLoc = sourceDir;
     mfLoc.append(QStringLiteral("/kde-build-metadata/logical-module-structure"));
 
     QFile metaFile(mfLoc);
@@ -36,6 +37,7 @@ QString metadata::findMetaFile() {
     qDebug() << mfLoc;
 
     if (!metaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qDebug() << i18n("Metafile open failed.");
         return i18n("Unable to read file.");
     }
 
@@ -47,6 +49,12 @@ QString metadata::findMetaFile() {
          qDebug() << err->errorString();
     }
 
+    QString dataDir = mfLoc;
+    mfLoc.append(QStringLiteral("/kde-build-metadata"));
+
+    kcdXML xml;
+    bool open = xml.findXML(sourceDir.append(QStringLiteral("/kde-build-metadata")));
+    qDebug() << i18n("XML Result") << open;
 
     QJsonObject obj = doc.object();
     QVariantMap qvm = obj.toVariantMap();
@@ -54,16 +62,14 @@ QString metadata::findMetaFile() {
 
     QList<QString> item1 = groups.keys();
 
+    xml.openXML();
+
     Q_FOREACH(QString val, item1) {
-        qDebug() << val;
+      //  qDebug() << val;
+        xml.addEntry(val);
     }
 
-    qDebug() << item1[12];
+    xml.closeXML();
 
-    //qDebug() << first;
-
-
-
-        return i18n("Success");
-
+    return xml.m_xmlFile;
 }

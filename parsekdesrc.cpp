@@ -37,6 +37,7 @@ QString ParseKdesrc::findRcFile()
         return i18n("Not found at expected location. Set manually.");
     }
     m_rcLocation = testLoc;
+    QString doIt = parseFile();
     return testLoc;
 
 }
@@ -57,12 +58,12 @@ QString ParseKdesrc::parseFile() {
 
         QRegularExpressionMatch sourceMatch = sourceDir.match(line);
         if (sourceMatch.hasMatch()) {
-            qDebug() << "source: " << sourceMatch.captured(1);
+            // qDebug() << "source: " << sourceMatch.captured(1);
             m_sourceDir = sourceMatch.captured(1);
         }
         QRegularExpressionMatch installMatch = installDir.match(line);
         if (installMatch.hasMatch()) {
-            qDebug() << "install: " << installMatch.captured(1);
+            // qDebug() << "install: " << installMatch.captured(1);
             m_installDir = sourceMatch.captured(1);
         }
     }
