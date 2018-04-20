@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QXmlStreamWriter>
+
 #include <KSharedConfig>
 
 #include "kcdconfig.h"
@@ -25,7 +26,7 @@ public:
 
     KSharedConfigPtr m_config();
 
-    bool findXML(QString file);
+    void startXml(QString file);
     void addEntry (QString element);
     void openXML();
     void closeXML();

@@ -15,6 +15,7 @@
 #include "kcdxml.h"
 #include "kcdconfig.h"
 
+#include <QtSql/QSql>
 
 // custom output stream!
 QTextStream& qStdOut() {
@@ -27,12 +28,11 @@ int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
 
-    kcdXML xml;
 
     QString pkgWanted;
 
     kcdConfig cfg;
-    cfg.setup();
+   // cfg.setup();
    // QString rcFile = cfg.getRcFile();
    // qDebug() << rcFile;
    // qDebug() << cfg.getSourceDir();
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 
     const QStringList args = parser.positionalArguments();
 
-    qDebug() << args;
+   // qDebug() << args;
 
 
     if (!args.isEmpty()) {
@@ -100,19 +100,22 @@ int main(int argc, char **argv)
         exit(0);
     }
 
-/**
+
     if (pkgWanted != QStringLiteral("")) {
-        qDebug() << pkgWanted;
+
+        kcdXML xml;
+
+        //qDebug() << pkgWanted;
         QString xmlFile = xml.getXMLfile();
-        qDebug() << xmlFile;
+        //qDebug() << xmlFile;
 
         QString result = xml.doSearch(pkgWanted);
-        qDebug() << "result" << result;
+       // qDebug() << "result" << result;
 
 
 
     }
 
     return 0;
-*/
+
 }

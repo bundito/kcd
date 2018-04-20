@@ -17,6 +17,8 @@ find_package(ECM 1.0.0 REQUIRED NO_MODULE)
 
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
+set(CMAKE_CXX_FLAGS -fexceptions)
+
 # set up kf5
 
 include(KDEInstallDirs)
@@ -34,6 +36,9 @@ find_package(
         DBus
         PrintSupport
         Quick
+        XmlPatterns
+        Xml
+        Sql
 )
 
 find_package(
@@ -58,7 +63,8 @@ add_definitions(-DQT_NO_CAST_FROM_ASCII)
 add_definitions(-DQT_NO_CAST_TO_ASCII)
 add_definitions(-DQT_NO_NARROWING_CONVERSIONS_IN_CONNECT)
 
-add_executable(${PROJECT_NAME} "kcd.cpp" "kcdxml.cpp" "metadata.cpp" "parsekdesrc.cpp" kcdconfig.cpp)
+add_executable(${PROJECT_NAME} "kcd.cpp" "kcdxml.cpp" "metadata.cpp" "parsekdesrc.cpp"
+    "kcdconfig.cpp")
 
 
 target_link_libraries(
@@ -66,8 +72,11 @@ target_link_libraries(
         KF5::CoreAddons
         KF5::I18n
         KF5::ConfigCore
+        Qt5::Sql
+
+
 )
 
+
+
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-

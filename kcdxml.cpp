@@ -2,12 +2,16 @@
 #include "parsekdesrc.h"
 #include "kcdconfig.h"
 
+
 #include <QString>
 #include <QFile>
 #include <QDir>
 #include <QUrl>
 #include <QXmlStreamWriter>
+#include <QXmlStreamReader>
 #include <QXmlStreamAttribute>
+
+#include <QtXml/QDomDocument>
 #include <QDebug>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
@@ -25,37 +29,24 @@ kcdXML::kcdXML()
 
 }
 
-bool kcdXML::findXML(QString fname) {
+void kcdXML::startXml(QString fname) {
     QString baseName = QStringLiteral("/kcd.xml");
     fname.append(baseName);
 
     m_xmlFile = fname;
 
-    qDebug() << "XML File: " << m_xmlFile;
+    QFile file(m_xmlFile);
+    file.open(QIODevice::WriteOnly);
 
-    QFile xmlFile(fname);
+    QTextStream in(&file);
 
-    if (!xmlFile.exists()) {
-        // qDebug() << i18n("No XML File");
-        QFile file(m_xmlFile);
-        file.open(QIODevice::WriteOnly);
-        QXmlStreamWriter stream(&file);
-        stream.writeStartDocument();
-        stream.setAutoFormatting(true);
-        bool ok = stream.hasError();
-        if (!ok) {
-            // qDebug() << i18n("Streamwriter has error");
-            return false;
-        } else {
-            // qDebug() << i18n("XML File created");
-            m_fileExists = true;
-            return true;
-        }
-    } else {
-        // qDebug() << i18n("File exists");
-        m_fileExists = true;
-        return true;
-    }
+    in << (QStringLiteral("<?xml version='1.0' encoding='UTF-8'?>")) << "\n";
+    in << (QStringLiteral("<modlist>")) << "\n";
+
+
+    //qDebug() << "XML File: " << m_xmlFile;
+
+
 }
 
 void kcdXML::addEntry(QString data) {
@@ -73,7 +64,7 @@ void kcdXML::addEntry(QString data) {
     if (exists) {
         m_installed++;
     }
-    qDebug() << mfLoc;
+    //qDebug() << mfLoc;
     QString inst = QString::number(exists);
 
 
@@ -99,9 +90,12 @@ void kcdXML::openXML() {
     file.open(QIODevice::WriteOnly);
     QXmlStreamWriter m_stream(&file);
     m_stream.setAutoFormatting(true);
+    m_stream.writeStartDocument();
+    m_stream.writeStartElement(QStringLiteral("<modlist>"));
 }
 
 void kcdXML::closeXML() {
+    m_stream.writeEndElement();
     m_stream.writeEndDocument();
     QFile file(m_xmlFile);
     file.close();
@@ -117,18 +111,37 @@ void kcdXML::saveXMLFile() {
 
 QString kcdXML::doSearch(QString query) {
 
+    m_xmlFile = cfg.getXmlFile();
+/**
     QString xq = QStringLiteral(" \
         <result> \
         {doc(\"XMLFILE\")/module[name=\"QUERY\"<path>{path}</path>} \
         </result>");
 
-   QRegularExpression xmlFile(QStringLiteral("XMLFILE"));
+   QRegularExpression xmlFile(QStringLiteral("XMLFILE"));"
    QRegularExpression searchString(QStringLiteral("QUERY"));
     xq.replace(xmlFile, m_xmlFile);
     xq.replace(searchString, query);
 
-    qDebug() << getXMLfile();
+**/
 
-   return xq;
+    QFile xml(m_xmlFile);
+    xml.open(QIODevice::ReadWrite);
+    QXmlStreamReader stream(&xml);
+
+    while (!stream.atEnd()) {
+        stream.readNextStartElement();
+        stream.tokenString();
+        stream.readNext();
+    }
+
+    if (stream.hasError()) {
+        qDebug() << stream.errorString();
+    }
+
+
+   // qDebug() << getXMLfile();
+
+   return QStringLiteral("foo");
 
 }

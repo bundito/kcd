@@ -24,6 +24,12 @@ kcdConfig::kcdConfig()
 
    //updateCfg();
 }
+
+void kcdConfig::openCfg() {
+    KSharedConfigPtr m_config = KSharedConfig::openConfig(QStringLiteral("kcdrc"));
+    generalGroup = KConfigGroup(m_config, QStringLiteral("General"));
+}
+
 void kcdConfig::setup() {
 
     QString source = pk.getSourceDir();
@@ -78,4 +84,11 @@ QString kcdConfig::getSourceDir() {
 QString kcdConfig::getMetaData() {
     m_metaDir = md.getMetaData(m_sourceDir);
     return m_metaDir;
+}
+
+QString kcdConfig::getXmlFile() {
+
+    QString xmlFile = generalGroup.readEntry(QStringLiteral("xmlFile"));
+    return xmlFile;
+
 }

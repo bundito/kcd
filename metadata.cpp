@@ -47,14 +47,14 @@ QString metadata::getMetaData(QString sourceDir) {
     QJsonDocument doc = QJsonDocument::fromJson(jsonData, err);
 
     if (err->error != 0) {
-         qDebug() << err->errorString();
+         //qDebug() << err->errorString();
     }
 
     QString dataDir = mfLoc;
     mfLoc.append(QStringLiteral("/kde-build-metadata"));
 
     kcdXML xml;
-    xml.findXML(sourceDir.append(QStringLiteral("/kde-build-metadata")));
+    xml.startXml(sourceDir.append(QStringLiteral("/kde-build-metadata")));
     //qDebug() << i18n("XML Result") << open;
 
     QJsonObject obj = doc.object();

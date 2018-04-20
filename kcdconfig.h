@@ -32,6 +32,8 @@ public:
 
     void storeXMLFile(QString file);
 
+    void openCfg();
+
     void storeData(QString key, QVariant value);
 
     QString getMetaData();
