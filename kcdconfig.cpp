@@ -32,6 +32,8 @@ void kcdConfig::openCfg() {
 
 void kcdConfig::setup() {
 
+    pk.findRcFile();
+
     QString source = pk.getSourceDir();
     storeData(QStringLiteral("sourceDir"), source);
 
@@ -40,6 +42,13 @@ void kcdConfig::setup() {
 
     QString xmlFile = md.getMetaData(source);
     storeData(QStringLiteral("xmlFile"), xmlFile);
+
+    QString metaDir = md.findMetaDir(source);
+    storeParameter(QStringLiteral("metaDir"), metaDir);
+
+    QString metaFile = md.findMetaFile(metaDir);
+    storeParameter(QStringLiteral("metaFile"), metaFile);
+
 
 }
 
@@ -91,4 +100,17 @@ QString kcdConfig::getXmlFile() {
     QString xmlFile = generalGroup.readEntry(QStringLiteral("xmlFile"));
     return xmlFile;
 
+}
+
+QString kcdConfig::getParameter(QString key) {
+    openCfg();
+    QString retVal = generalGroup.readEntry(key);
+
+    return retVal;
+}
+
+void kcdConfig::storeParameter(QString key, QVariant value) {
+   // openCfg();
+    generalGroup.writeEntry(key, value);
+    generalGroup.sync();
 }

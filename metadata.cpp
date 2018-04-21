@@ -2,6 +2,7 @@
 #include "parsekdesrc.h"
 
 #include <QFile>
+#include <QDir>
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonValue>
@@ -18,20 +19,41 @@
 
 #include "kcdxml.h"
 #include "kcdconfig.h"
+#include "kcddatabase.h"
 
 metadata::metadata()
 {
     //m_metafile = getMetaData();
 }
 
+QString metadata::findMetaDir(QString sourceDir) {
+    // hook into config
+
+    // the metadata file should be $SRC/kde-build-metadata/logical-module-structure
+    QString metaDir = sourceDir.append(QStringLiteral("/kde-build-metadata"));
+    QDir md(metaDir);
+    if (!md.exists()) {
+        qDebug() << QStringLiteral("Metadata dir does not exist") << metaDir;
+    }
+    return metaDir;
+}
+
+QString metadata::findMetaFile(QString metaDir) {
+    QString metaFile = metaDir.append(QStringLiteral("/logical-module-structure"));
+    QFile mf(metaFile);
+    if (!mf.exists()) {
+        qDebug() << QStringLiteral("Metafile not found") << metaFile;
+    }
+    return metaFile;
+}
+
 QString metadata::getMetaData(QString sourceDir) {
 
     // The metadata file should be in ..src/kde-build-metadata
-
-    qDebug() << i18n("Hello from metadata");
+    QString metaDir = sourceDir.append(QStringLiteral("/kde-build-metadata"));
 
     QString mfLoc = sourceDir;
-    mfLoc.append(QStringLiteral("/kde-build-metadata/logical-module-structure"));
+    mfLoc.append(QStringLiteral("/logical-module-structure"));
 
     QFile metaFile(mfLoc);
 
@@ -39,7 +61,8 @@ QString metadata::getMetaData(QString sourceDir) {
 
     if (!metaFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qDebug() << i18n("Metafile open failed.");
-        return i18n("Unable to read file.");
+        qDebug() << mfLoc;
+        exit(1);
     }
 
     QByteArray jsonData = metaFile.readAll();
@@ -53,6 +76,7 @@ QString metadata::getMetaData(QString sourceDir) {
     QString dataDir = mfLoc;
     mfLoc.append(QStringLiteral("/kde-build-metadata"));
 
+
     kcdXML xml;
     xml.startXml(sourceDir.append(QStringLiteral("/kde-build-metadata")));
     //qDebug() << i18n("XML Result") << open;
@@ -63,19 +87,16 @@ QString metadata::getMetaData(QString sourceDir) {
 
     QList<QString> item1 = groups.keys();
 
-    xml.openXML();
-    qint16 count = 0;
+    KcdDatabase db;
+    db.clearModuleTable();
+
+    // ** THIS IS WHERE THE MAGIC HAPPENS **
     Q_FOREACH(QString val, item1) {
       //  qDebug() << val;
-        xml.addEntry(val);
-        count++;
+        db.addRow(val);
     }
 
-    xml.closeXML();
-
     kcdConfig cfg;
-    cfg.storeData(QStringLiteral("total"), count);
-    cfg.storeData(QStringLiteral("installed"), xml.m_total);
 
     return xml.m_xmlFile;
 }

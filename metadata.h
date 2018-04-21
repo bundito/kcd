@@ -12,6 +12,9 @@ class metadata
 {
 public:
 
+    QString findMetaDir(QString sourceDir);
+    QString findMetaFile(QString metaDir);
+
      // basic constructor
      metadata();
 

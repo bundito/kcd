@@ -1,0 +1,10 @@
+#ifndef KCD_CONFIG_H
+#define KCD_CONFIG_H
+
+/* Set the version from CMake */
+#cmakedefine KCD_VERSION "@KCD_VERSION@"
+
+/* set the release codename */
+#define KCD_CODENAME "Donny"
+
+#endif
