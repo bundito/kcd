@@ -34,7 +34,11 @@ public:
 
     void openCfg();
 
+    // TODO: find redundant/duplicate calls and eliminate
+    void storeParameter(QString key, QVariant value);
     void storeData(QString key, QVariant value);
+
+
 
     QString getMetaData();
     void setConfigFile(QString file);
@@ -55,6 +59,8 @@ public:
     QString m_XmlFile;
     void setXmlFile(QString file);
     QString getXmlFile();
+
+    QString getParameter(QString key);
 
 };
 

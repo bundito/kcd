@@ -136,7 +136,7 @@ QString kcdXML::doSearch(QString query) {
     }
 
     if (stream.hasError()) {
-        qDebug() << stream.errorString();
+        //qDebug() << stream.errorString();
     }
 
 

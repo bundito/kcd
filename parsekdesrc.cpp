@@ -13,7 +13,7 @@
 #include <QDebug>
 
 ParseKdesrc::ParseKdesrc() {
-    m_rcLocation = findRcFile();
+   // m_rcLocation = findRcFile();
 }
 
 
@@ -27,6 +27,8 @@ QString ParseKdesrc::getFileLoc() {
 
 QString ParseKdesrc::findRcFile()
 {
+    //kcdConfig cfg;
+
     QString rcFile = QStringLiteral(".kdesrc-buildrc");
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     QString homeDir = env.value(QStringLiteral("HOME"));
@@ -39,8 +41,9 @@ QString ParseKdesrc::findRcFile()
         return i18n("Not found at expected location. Set manually.");
     }
     m_rcLocation = testLoc;
+    //cfg.storeParameter(QStringLiteral("rcFile"), testLoc);
     QString doIt = parseFile();
-    return testLoc;
+    return doIt;
 
 }
 
