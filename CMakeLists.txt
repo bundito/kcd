@@ -65,8 +65,8 @@ find_package(
 set ( KCD_SOURCES
         kcd.cpp
         kcdxml.cpp
-        metadata.cpp
-        parsekdesrc.cpp
+        kcdmetadata.cpp
+        kcdparse.cpp
         kcdconfig.cpp
         kcddatabase.cpp
 )

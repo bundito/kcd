@@ -1,5 +1,5 @@
 #include "kcdxml.h"
-#include "parsekdesrc.h"
+#include "kcdparse.h"
 #include "kcdconfig.h"
 
 

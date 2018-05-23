@@ -7,16 +7,16 @@
 #include <KSharedConfig>
 
 #include "kcdconfig.h"
-#include "parsekdesrc.h"
-#include "metadata.h"
+#include "kcdparse.h"
+#include "kcdmetadata.h"
 
 
 
 kcdConfig::kcdConfig()
 {
 
-   ParseKdesrc pk;
-   metadata md;
+   Kcdparse pk;
+   Kcdmetadata md;
 
    KSharedConfigPtr m_config = KSharedConfig::openConfig(QStringLiteral("kcdrc"));
    generalGroup = KConfigGroup(m_config, QStringLiteral("General"));

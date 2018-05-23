@@ -3,8 +3,8 @@
 
 #include <QString>
 
-#include "parsekdesrc.h"
-#include "metadata.h"
+#include "kcdparse.h"
+#include "kcdmetadata.h"
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -18,8 +18,8 @@ public:
     // default constructor
     kcdConfig();
 
-    ParseKdesrc pk;
-    metadata md;
+    Kcdparse pk;
+    Kcdmetadata md;
 
     KConfig cfg;
     KConfigGroup generalGroup;

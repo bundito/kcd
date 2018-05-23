@@ -12,8 +12,8 @@
 
 #include <KLocalizedString>
 
-#include "parsekdesrc.h"
-#include "metadata.h"
+#include "kcdparse.h"
+#include "kcdmetadata.h"
 #include "kcdxml.h"
 #include "kcdconfig.h"
 #include "kcddatabase.h"
@@ -68,10 +68,10 @@ int main(int argc, char **argv)
 
     if (parser.isSet(QStringLiteral("refresh"))) {
 
-        ParseKdesrc pk;
+        Kcdparse pk;
         QString dir = pk.getFileLoc();
 
-        metadata md;
+        Kcdmetadata md;
         QString results = md.getMetaData(pk.getSourceDir());
        // qDebug() << results;
         qStdOut() << i18n("Package listing refreshed.\n");
